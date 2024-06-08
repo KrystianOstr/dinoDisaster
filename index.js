@@ -2,6 +2,8 @@ const gameArea = document.querySelector(".game-area");
 const playerElement = document.querySelector(".player");
 const scoreElement = document.querySelector(".score");
 const timeElement = document.querySelector(".time");
+const leftButton = document.getElementById("leftButton");
+const rightButton = document.getElementById("rightButton");
 
 // const startButton = document.querySelector(".start");
 
@@ -133,19 +135,10 @@ function checkCollision(player, enemy) {
 
 function startGame() {
   if (isMobile()) {
-    console.log(document.querySelector("#leftButton"));
-    document
-      .querySelector("#leftButton")
-      .addEventListener("touchstart", () => (movingLeft = true));
-    document
-      .querySelector("#leftButton")
-      .addEventListener("touchend", () => (movingLeft = false));
-    document
-      .querySelector("#rightButton")
-      .addEventListener("touchstart", () => (movingRight = true));
-    document
-      .querySelector("#rightButton")
-      .addEventListener("touchend", () => (movingRight = false));
+    leftButton.addEventListener("touchstart", () => (movingLeft = true));
+    leftButton.addEventListener("touchend", () => (movingLeft = false));
+    rightButton.addEventListener("touchstart", () => (movingRight = true));
+    rightButton.addEventListener("touchend", () => (movingRight = false));
   } else {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
