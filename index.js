@@ -132,11 +132,20 @@ function checkCollision(player, enemy) {
 }
 
 function startGame() {
+  if (isMobile()) {
+    document
+      .querySelector("#leftButton")
+      .addEventListener("touchstart", handleKeyDown);
+    document
+      .querySelector("#leftButton")
+      .addEventListener("touchend", handleKeyUp);
+  } else {
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("keyup", handleKeyUp);
+  }
+
   document.querySelector(".button-box").classList.add("hidden");
   document.querySelector(".game-container").classList.remove("hidden");
-
-  document.addEventListener("keydown", handleKeyDown);
-  document.addEventListener("keyup", handleKeyUp);
 
   const updateInterval = setInterval(moveHero, 16);
 
@@ -160,6 +169,22 @@ function handleKeyDown(e) {
 function handleKeyUp(e) {
   if (e.key === "ArrowLeft") movingLeft = false;
   if (e.key === "ArrowRight") movingRight = false;
+}
+
+function isMobileScreen() {
+  return window.innerWidth <= 800 && window.innerHeight <= 600;
+}
+
+function isTouchDevice() {
+  return "ontouchstart" in window || navigator.maxTouchPoints > 0;
+}
+
+function isMobileUserAgent() {
+  return /Mobi|Android/i.test(navigator.userAgent);
+}
+
+function isMobile() {
+  return isMobileScreen() || isTouchDevice() || isMobileUserAgent();
 }
 
 function moveHero() {

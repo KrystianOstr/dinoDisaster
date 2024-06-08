@@ -4,6 +4,36 @@
   box-sizing: border-box;
 }
 
+.controls-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 300px;
+}
+
+#leftButton,
+#rightButton {
+  width: 100px;
+  height: 100px;
+  font-size: 24px;
+  z-index: 10;
+}
+#leftButton {
+  align-self: flex-start;
+  justify-self: start;
+  background-image: url("./arrowLeft.png");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
+#rightButton {
+  align-self: flex-end;
+  justify-self: start;
+  background-image: url("./arrowRight.png");
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+}
 h2 {
   font-family: "roboto";
 }
