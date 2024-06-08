@@ -89,8 +89,16 @@ function createNewBlock() {
     }
 
     if (checkCollision(playerElement, enemyBlock)) {
+      // if (isMobile()) {
+      leftButton.removeEventListener("touchstart", startMovingLeft);
+      leftButton.removeEventListener("touchend", stopMovingLeft);
+      rightButton.removeEventListener("touchstart", startMovingRight);
+      rightButton.removeEventListener("touchend", startMovingRight);
+      // } else {
       document.removeEventListener("keydown", handleKeyDown);
       document.removeEventListener("keyup", handleKeyUp);
+      // }
+
       enemyBlock.style.backgroundImage = `url("./explosion.png")`;
       playerElement.style.backgroundImage = `url("./explosion.png")`;
 
@@ -135,12 +143,12 @@ function checkCollision(player, enemy) {
 
 function startGame() {
   if (isMobile()) {
-    gameArea.style.transform = "scale(0.5)";
+    gameArea.style.transform = "scale(0.8)";
 
-    leftButton.addEventListener("touchstart", () => (movingLeft = true));
-    leftButton.addEventListener("touchend", () => (movingLeft = false));
-    rightButton.addEventListener("touchstart", () => (movingRight = true));
-    rightButton.addEventListener("touchend", () => (movingRight = false));
+    leftButton.addEventListener("touchstart", startMovingLeft);
+    leftButton.addEventListener("touchend", stopMovingLeft);
+    rightButton.addEventListener("touchstart", startMovingRight);
+    rightButton.addEventListener("touchend", stopMovingRight);
   } else {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
@@ -161,6 +169,22 @@ function startGame() {
     () => createBonus(),
     randomValueMaxMin(10000, 2000)
   );
+}
+
+function startMovingLeft() {
+  movingLeft = true;
+}
+
+function stopMovingLeft() {
+  movingLeft = false;
+}
+
+function startMovingRight() {
+  movingRight = true;
+}
+
+function stopMovingRight() {
+  movingRight = false;
 }
 
 function handleKeyDown(e) {
