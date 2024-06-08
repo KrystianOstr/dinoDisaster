@@ -133,12 +133,19 @@ function checkCollision(player, enemy) {
 
 function startGame() {
   if (isMobile()) {
+    console.log(document.querySelector("#leftButton"));
     document
       .querySelector("#leftButton")
-      .addEventListener("touchstart", handleKeyDown);
+      .addEventListener("touchstart", () => (movingLeft = true));
     document
       .querySelector("#leftButton")
-      .addEventListener("touchend", handleKeyUp);
+      .addEventListener("touchend", () => (movingLeft = false));
+    document
+      .querySelector("#rightButton")
+      .addEventListener("touchstart", () => (movingRight = true));
+    document
+      .querySelector("#rightButton")
+      .addEventListener("touchend", () => (movingRight = false));
   } else {
     document.addEventListener("keydown", handleKeyDown);
     document.addEventListener("keyup", handleKeyUp);
