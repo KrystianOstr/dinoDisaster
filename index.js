@@ -135,6 +135,7 @@ function checkCollision(player, enemy) {
 
 function startGame() {
   if (isMobile()) {
+    gameArea.style.transform = "scale(0.8)";
     leftButton.addEventListener("touchstart", () => (movingLeft = true));
     leftButton.addEventListener("touchend", () => (movingLeft = false));
     rightButton.addEventListener("touchstart", () => (movingRight = true));
