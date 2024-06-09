@@ -7,6 +7,7 @@ const rightButton = document.getElementById("rightButton");
 
 // const startButton = document.querySelector(".start");
 
+let difficultyMultiplier;
 let playerPosition = 220;
 let playerScore = 0;
 let speedUpGeneratingEnemies = 0;
@@ -20,6 +21,8 @@ let movingRight = false;
 let timerInterval;
 
 let sendNewBlock;
+let sendNewBlock2;
+let sendNewBlock3;
 let generateNewBonus;
 
 scoreElement.textContent = playerScore;
@@ -30,18 +33,36 @@ function updateScore(score) {
   scoreElement.textContent = playerScore;
 }
 
+function setDifficulty(level) {
+  if (level === "disaster") {
+    difficultyMultiplier = 0.1;
+    sendNewBlock2 = setInterval(() => createNewBlock(), 1800);
+    setTimeout(() => {
+      sendNewBlock3 = setInterval(() => createNewBlock(), 2300);
+    }, 60 * 1000);
+  } else if (level === "hard") {
+    difficultyMultiplier = 0.5;
+    sendNewBlock2 = setInterval(() => createNewBlock(), 1800);
+  } else if (level === "medium") {
+    difficultyMultiplier = 1;
+    sendNewBlock2 = setInterval(() => createNewBlock(), 2100);
+  } else {
+    difficultyMultiplier = 1;
+  }
+}
+
 function checkDifficuly() {
-  if (timeScore < 30) {
+  if (timeScore <= 30 * difficultyMultiplier) {
     enemySpeed = 2;
-  } else if (timeScore < 60) {
+  } else if (timeScore <= 60 * difficultyMultiplier) {
     enemySpeed = 3;
-  } else if (timeScore < 90) {
+  } else if (timeScore <= 90 * difficultyMultiplier) {
     enemySpeed = 4;
-  } else if (timeScore < 240) {
+  } else if (timeScore <= 240 * difficultyMultiplier) {
     enemySpeed = 5;
-  } else if (timeScore < 300) {
+  } else if (timeScore <= 300 * difficultyMultiplier) {
     enemySpeed = 6;
-  } else if (timeScore < 360) {
+  } else if (timeScore <= 360 * difficultyMultiplier) {
     enemySpeed = 7;
   }
 }
@@ -89,15 +110,15 @@ function createNewBlock() {
     }
 
     if (checkCollision(playerElement, enemyBlock)) {
-      // if (isMobile()) {
-      leftButton.removeEventListener("touchstart", startMovingLeft);
-      leftButton.removeEventListener("touchend", stopMovingLeft);
-      rightButton.removeEventListener("touchstart", startMovingRight);
-      rightButton.removeEventListener("touchend", startMovingRight);
-      // } else {
-      document.removeEventListener("keydown", handleKeyDown);
-      document.removeEventListener("keyup", handleKeyUp);
-      // }
+      if (isMobile()) {
+        leftButton.removeEventListener("touchstart", startMovingLeft);
+        leftButton.removeEventListener("touchend", stopMovingLeft);
+        rightButton.removeEventListener("touchstart", startMovingRight);
+        rightButton.removeEventListener("touchend", startMovingRight);
+      } else {
+        document.removeEventListener("keydown", handleKeyDown);
+        document.removeEventListener("keyup", handleKeyUp);
+      }
 
       enemyBlock.style.backgroundImage = `url("./explosion.png")`;
       playerElement.style.backgroundImage = `url("./explosion.png")`;
@@ -105,8 +126,9 @@ function createNewBlock() {
       clearInterval(blockInterval);
       clearInterval(timerInterval);
       clearInterval(sendNewBlock);
+      clearInterval(sendNewBlock2);
+      clearInterval(sendNewBlock3);
       clearInterval(generateNewBonus);
-      // document.location.reload();
       document.querySelector(".result-box").classList.remove("hidden");
     }
   }, 16);
@@ -141,7 +163,8 @@ function checkCollision(player, enemy) {
   return false;
 }
 
-function startGame() {
+function startGame(difficulty) {
+  setDifficulty(difficulty);
   if (isMobile()) {
     gameArea.style.transform = "scale(0.65)";
     document.querySelector(".controls-box").classList.remove("hidden");
@@ -161,6 +184,7 @@ function startGame() {
   const updateInterval = setInterval(moveHero, 16);
 
   sendNewBlock = setInterval(() => createNewBlock(), 1600);
+
   timerInterval = setInterval(() => {
     timeScore++;
     timeElement.textContent = timeScore;
@@ -225,7 +249,13 @@ function moveHero() {
   }
 }
 
-document.querySelector(".start").addEventListener("click", startGame);
+document.querySelectorAll(".button-box button").forEach((button) => {
+  button.addEventListener("click", () => {
+    const difficulty = button.classList[0];
+    startGame(difficulty);
+  });
+});
+
 document
   .querySelector(".restart")
   .addEventListener("click", () => document.location.reload());
